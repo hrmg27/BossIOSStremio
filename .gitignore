@@ -14,3 +14,6 @@ Payload/
 # User settings
 xcuserdata/
 *.xcuserstate
+
+# Claude Code local settings
+.claude/

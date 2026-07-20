@@ -1,0 +1,6 @@
+# Normalize line endings to LF in the repo so cross-platform (Windows author,
+# macOS build) checkouts are consistent.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ipa binary
