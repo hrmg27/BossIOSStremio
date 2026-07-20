@@ -18,10 +18,13 @@ Core slice in place:
 - `PlayerView` — embedded `AVPlayer` (via `AVPlayerViewController`: PiP, AirPlay,
   track menu). Resume-seek on open, periodic + on-exit/background progress capture,
   writes back through `LibrarySync.updateProgress`. Tapping a Continue Watching item
-  currently plays a sample stream **read-only** (no writes) until `AddonClient` lands.
+  currently plays a sample stream **read-only** (no writes) until wiring lands.
+- `AddonClient` — Addon Protocol models + concurrent stream/subtitle resolution
+  across installed add-ons; `StremioAPI.getAddons` returns the typed collection.
 
-Next: `AddonClient` (resolve real streams from installed add-ons, wire real progress
-writes), `DebridResolver`, subtitles.
+Next: wire `AddonClient` into the UI (stream picker → real playback → real progress
+writes, replacing the demo stream), then `DebridResolver` for torrents, then
+subtitle track loading + language preference.
 
 ## Building from Windows
 
