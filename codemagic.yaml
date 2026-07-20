@@ -38,13 +38,19 @@ workflows:
           APP_PATH="build/Build/Products/Release-iphoneos/StremioIOS.app"
           # Sanity-check the bundle identity — a missing CFBundleIdentifier /
           # CFBundleExecutable is what makes AltStore reject an .ipa as "wrong format".
-          echo "--- Built Info.plist identity ---"
-          plutil -p "$APP_PATH/Info.plist" | grep -E "CFBundleIdentifier|CFBundleExecutable|CFBundleVersion|CFBundleShortVersionString|MinimumOSVersion" || true
+          echo "--- Full built Info.plist ---"
+          plutil -p "$APP_PATH/Info.plist" || true
+          echo "--- Validate Info.plist is well-formed ---"
+          plutil -lint "$APP_PATH/Info.plist" || true
           test -f "$APP_PATH/StremioIOS" && echo "Executable present: OK" || (echo "MISSING EXECUTABLE" && exit 1)
           rm -rf Payload StremioIOS-unsigned.ipa
           mkdir -p Payload
           cp -R "$APP_PATH" Payload/
           zip -r -X StremioIOS-unsigned.ipa Payload -x "*.DS_Store"
+          echo "--- Final .ipa contents ---"
+          unzip -l StremioIOS-unsigned.ipa
+          echo "--- .ipa size ---"
+          ls -lh StremioIOS-unsigned.ipa
     artifacts:
       - StremioIOS-unsigned.ipa
     publishing:
