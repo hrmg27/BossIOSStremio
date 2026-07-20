@@ -65,8 +65,8 @@ struct TitleDetailView: View {
             Text("No streams found from your installed add-ons for this title.")
                 .foregroundStyle(.secondary)
         } else {
-            ForEach(Array(streams.enumerated()), id: \.offset) { _, stream in
-                streamRow(stream)
+            ForEach(Array(streams.enumerated()), id: \.offset) { pair in
+                streamRow(pair.element)
             }
         }
     }
