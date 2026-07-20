@@ -79,7 +79,10 @@ struct TitleDetailView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(stream.displayTitle).lineLimit(3)
                     if stream.isTorrent {
-                        Text("Torrent — needs a debrid service (coming soon)")
+                        // No direct URL: this comes from an add-on without debrid.
+                        // Debrid-configured add-ons (e.g. Torrentio + Real-Debrid)
+                        // resolve server-side and return a playable `url` instead.
+                        Text("Torrent with no direct link — enable debrid on the add-on")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

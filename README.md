@@ -25,8 +25,13 @@ Core slice in place:
   streams (`AddonStore`) → embedded player plays the chosen stream and writes real
   progress back to the account. App icon added.
 
-Next: `DebridResolver` for torrent streams (currently shown but disabled), subtitle
-track loading + language preference, series episode browsing (meta resource).
+Debrid needs no client code: debrid-configured add-ons (e.g. Torrentio +
+Real-Debrid) resolve server-side and return a directly playable `url`. The account's
+`transportUrl` carries the debrid config and `AddonClient` preserves it, so those
+streams just play. Only add-ons *without* debrid return url-less torrents (disabled).
+
+Next: subtitle track loading + language preference, series episode browsing (meta
+resource), UI polish.
 
 ## Building from Windows
 
