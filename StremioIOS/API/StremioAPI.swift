@@ -31,9 +31,12 @@ final class StremioAPI {
         try await post("login", body: LoginRequest(email: email, password: password))
     }
 
-    func getAddonCollection(authKey: String) async throws -> JSONValue {
-        try await post("addonCollectionGet",
-                       body: AddonCollectionGetRequest(authKey: authKey, update: true))
+    func getAddons(authKey: String) async throws -> [AddonDescriptor] {
+        let collection: AddonCollection = try await post(
+            "addonCollectionGet",
+            body: AddonCollectionGetRequest(authKey: authKey, update: true)
+        )
+        return collection.addons
     }
 
     func datastoreGet(authKey: String,
