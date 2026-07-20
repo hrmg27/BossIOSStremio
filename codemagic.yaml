@@ -1,0 +1,49 @@
+# Codemagic CI — builds an UNSIGNED .ipa on a cloud Mac.
+# Download the artifact (or get it by email) and install from Windows via
+# AltServer + AltStore (resigns with your free Apple ID). No paid Developer
+# account or signing certs needed here.
+workflows:
+  ios-unsigned:
+    name: iOS unsigned build
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      xcode: latest
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+    scripts:
+      - name: Install XcodeGen
+        script: brew install xcodegen
+      - name: Generate Xcode project
+        script: xcodegen generate
+      - name: Build (unsigned)
+        script: |
+          xcodebuild \
+            -project StremioIOS.xcodeproj \
+            -scheme StremioIOS \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            clean build
+      - name: Package .ipa
+        script: |
+          APP_PATH="build/Build/Products/Release-iphoneos/StremioIOS.app"
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          zip -r StremioIOS-unsigned.ipa Payload
+    artifacts:
+      - StremioIOS-unsigned.ipa
+    publishing:
+      email:
+        recipients:
+          - hrmg27.hg@gmail.com
+        notify:
+          success: true
+          failure: true

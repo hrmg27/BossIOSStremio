@@ -1,0 +1,16 @@
+# Generated Xcode project (regenerate with `xcodegen generate`)
+*.xcodeproj/
+*.xcworkspace/
+
+# Xcode / build output
+build/
+DerivedData/
+*.ipa
+Payload/
+
+# macOS
+.DS_Store
+
+# User settings
+xcuserdata/
+*.xcuserstate

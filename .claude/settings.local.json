@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "PowerShell($g = Get-Command git -ErrorAction SilentlyContinue; if \\($g\\) { \"git already: $\\($g.Source\\)\" } else { winget install --id Git.Git -e --accept-source-agreements --accept-package-agreements --silent 2>&1 | Select-Object -Last 15 })"
+    ]
+  }
+}
