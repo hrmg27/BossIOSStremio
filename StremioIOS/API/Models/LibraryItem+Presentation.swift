@@ -7,6 +7,12 @@ extension LibraryItem {
         return URL(string: poster)
     }
 
+    /// The id to request streams for: the specific episode (e.g. `tt123:1:5`) when
+    /// known, otherwise the item id (an imdb id for movies).
+    var streamRequestID: String {
+        state.videoID ?? id
+    }
+
     /// Fraction watched, clamped to 0...1. Zero when duration is unknown.
     var progressFraction: Double {
         guard state.duration > 0 else { return 0 }

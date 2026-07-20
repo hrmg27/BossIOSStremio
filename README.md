@@ -21,10 +21,12 @@ Core slice in place:
   currently plays a sample stream **read-only** (no writes) until wiring lands.
 - `AddonClient` — Addon Protocol models + concurrent stream/subtitle resolution
   across installed add-ons; `StremioAPI.getAddons` returns the typed collection.
+- Wired end to end: `HomeView` → library list → `TitleDetailView` resolves real
+  streams (`AddonStore`) → embedded player plays the chosen stream and writes real
+  progress back to the account. App icon added.
 
-Next: wire `AddonClient` into the UI (stream picker → real playback → real progress
-writes, replacing the demo stream), then `DebridResolver` for torrents, then
-subtitle track loading + language preference.
+Next: `DebridResolver` for torrent streams (currently shown but disabled), subtitle
+track loading + language preference, series episode browsing (meta resource).
 
 ## Building from Windows
 
