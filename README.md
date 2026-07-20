@@ -15,9 +15,13 @@ Core slice in place:
 - `LibrarySync` — reads the library, exposes "Continue Watching", writes progress
   back (last-write-wins by `_mtime`).
 - Minimal SwiftUI: login → library with a Continue Watching section.
+- `PlayerView` — embedded `AVPlayer` (via `AVPlayerViewController`: PiP, AirPlay,
+  track menu). Resume-seek on open, periodic + on-exit/background progress capture,
+  writes back through `LibrarySync.updateProgress`. Tapping a Continue Watching item
+  currently plays a sample stream **read-only** (no writes) until `AddonClient` lands.
 
-Next: `PlayerView` (AVPlayer + resume + progress write), `AddonClient`,
-`DebridResolver`, subtitles.
+Next: `AddonClient` (resolve real streams from installed add-ons, wire real progress
+writes), `DebridResolver`, subtitles.
 
 ## Building from Windows
 

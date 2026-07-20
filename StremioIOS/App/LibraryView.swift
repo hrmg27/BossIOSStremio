@@ -6,6 +6,7 @@ import SwiftUI
 struct LibraryView: View {
     @EnvironmentObject private var session: AppSession
     @StateObject private var library = LibrarySync()
+    @State private var playbackTarget: PlaybackTarget?
 
     var body: some View {
         NavigationStack {
@@ -25,6 +26,11 @@ struct LibraryView: View {
                 await library.refresh()
             }
         }
+        .fullScreenCover(item: $playbackTarget) { target in
+            // Read-only until AddonClient resolves real streams: resume-seek is
+            // exercised, but nothing is written back to the account.
+            PlayerView(target: target)
+        }
     }
 
     @ViewBuilder
@@ -43,7 +49,12 @@ struct LibraryView: View {
                 if !library.continueWatching.isEmpty {
                     Section("Continue Watching") {
                         ForEach(library.continueWatching) { item in
-                            ContinueWatchingRow(item: item)
+                            Button {
+                                playbackTarget = item.demoPlaybackTarget
+                            } label: {
+                                ContinueWatchingRow(item: item)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -55,6 +66,24 @@ struct LibraryView: View {
             }
             .refreshable { await library.refresh() }
         }
+    }
+}
+
+// MARK: - Temporary demo playback
+// TODO: Remove once AddonClient resolves real streams. Until then, tapping a
+// Continue Watching item plays a public sample HLS stream, seeking to the stored
+// resume position so the resume-seek path can be validated end to end. No progress
+// is written back (PlayerView is created without a persist closure), so the real
+// account state is never touched by this demo.
+private extension LibraryItem {
+    var demoPlaybackTarget: PlaybackTarget {
+        PlaybackTarget(
+            id: id,
+            videoID: state.videoID,
+            title: name,
+            streamURL: URL(string: "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8")!,
+            startPositionMs: state.timeOffset
+        )
     }
 }
 
