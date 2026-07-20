@@ -53,11 +53,3 @@ final class AppSession: ObservableObject {
         state = .signedOut
     }
 }
-
-extension StremioUser {
-    /// Local-only placeholder used when restoring a session from the Keychain.
-    init(id: String, email: String?) {
-        self.id = id
-        self.email = email
-    }
-}
